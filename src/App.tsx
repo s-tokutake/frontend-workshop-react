@@ -1,33 +1,71 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+//import reactLogo from './assets/react.svg'
+//import viteLogo from '/vite.svg'
 import './App.css'
 
+type Task = {
+  id: string
+  title: string
+  completed: boolean
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState<Task[]>([
+  ]) 
+  const [input, setInput] = useState('')
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!input.trim()) {
+      return
+    }
+    const task = {
+      id: crypto.randomUUID(),
+      title: input,
+      completed: false,
+    }
+    
+    setTasks([
+      ...tasks,
+      task,
+    ])
+    setInput('')
+  }
+
+  function handleToggle(task: Task) {
+    setTasks(
+      tasks.map((t) =>
+        t.id === task.id ? { ...t, completed: !t.completed } : t
+      )
+    )
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>todoアプリ</h1>
+      
+      {tasks.length > 0 ?
+      <>
+        <h2>My Task</h2>
+        <ul>
+          {tasks.map((task) => (
+            <li key={task.id}>
+              <input type="checkbox" 
+              onChange={() => handleToggle(task)}
+              checked={task.completed}
+              />
+              {task.title}
+            </li>
+          ))}
+        </ul>
+      </> : <p>タスクはありません</p>
+    }
+    <form onSubmit={handleSubmit}>
+      <input type="text" value={input} onChange={
+        (e) => setInput(e.target.value)
+      }></input>
+      <button type="submit">add tasks</button>
+    </form>
     </>
   )
 }
