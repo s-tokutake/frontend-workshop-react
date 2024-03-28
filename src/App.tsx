@@ -54,7 +54,7 @@ function App() {
               onChange={() => handleToggle(task)}
               checked={task.completed}
               />
-              {task.title}
+              {task.completed ? <s>{task.title}</s> : task.title}
             </li>
           ))}
         </ul>
