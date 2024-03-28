@@ -42,7 +42,7 @@ function App() {
 
   return (
     <>
-      <h1>todoアプリ</h1>
+      <h1>&#128129;todoアプリ&#128006;</h1>
       
       {tasks.length > 0 ?
       <>
